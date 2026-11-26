@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,10 +12,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-       $this->app->bind(
-        \App\Repositories\Contracts\ResiduoRepositoryInterface::class,
-        \App\Repositories\EloquentResiduoRepository::class
-        );
+        //
     }
 
     /**
@@ -22,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }
