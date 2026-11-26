@@ -1,0 +1,23 @@
+### 1. Iniciar sesión como Admin
+POST http://127.0.0.1:8000/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "correo": "admin@reciclabajio.mx",
+    "password": "Recicla2026*"
+}
+
+### 2. Crear un residuo (Pega aquí abajo el token que te dio la petición 1)
+POST http://127.0.0.1:8000/api/residuos
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer PEGA_AQUI_TU_TOKEN
+
+{
+    "nombre": "Monitor LED dañado",
+    "categoria": "Electrónicos (RAEE)",
+    "instrucciones": "No romper la pantalla ni tirar en basura doméstica.",
+    "preparacion": "Sin cables sueltos",
+    "fuente_info": "SIAP León"
+}
