@@ -1,0 +1,694 @@
+/* Variables de color, tipografia y espaciado con paleta organica y neutra */
+:root {
+  --fondo: #fafaf7;
+  --fondo-claro: #f2f2ec;
+  --superficie: #ffffff;
+  --borde: #deded6;
+  --borde-fuerte: #c5c5bb;
+  --texto: #1f2421;
+  --texto-suave: #565e59;
+  --verde-oscuro: #243e33;
+  --verde-medio: #2f5243;
+  --verde-claro: #ebf1ed;
+  --azul-reciclaje: #2f556f;
+  --ambar: #8f5b22;
+  --rojo-peligro: #8f3535;
+  --radio: 6px;
+  --transicion: 0.15s ease;
+}
+
+/* Normalizacion basica del modelo de caja */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Desplazamiento suave para enlaces internos */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Configuracion tipografica y colores base */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--texto);
+  background-color: var(--fondo);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Foco visible y sobrio para navegacion por teclado */
+:focus-visible {
+  outline: 2px solid var(--verde-oscuro);
+  outline-offset: 2px;
+}
+
+/* Enlace de salto para accesibilidad */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  background: var(--verde-oscuro);
+  color: #ffffff;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radio);
+  font-size: 0.9rem;
+  z-index: 1000;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Contenedor principal centrado */
+.contenedor {
+  width: min(1080px, 90%);
+  margin-inline: auto;
+}
+
+/* Encabezado fijo con separador fino */
+.encabezado {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--fondo);
+  border-bottom: 1px solid var(--borde);
+}
+
+.encabezado__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+}
+
+/* Identidad de marca minimalista */
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  color: var(--texto);
+  text-decoration: none;
+}
+
+/* Imagen del logotipo dentro del enlace de marca */
+.marca__icono {
+  display: block;
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  background: transparent;
+  border-radius: 0;
+  mix-blend-mode: multiply;
+}
+
+.marca__texto strong {
+  color: var(--verde-oscuro);
+  font-weight: 700;
+}
+
+/* Boton de menu para dispositivos moviles */
+.btn-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-menu__linea {
+  width: 20px;
+  height: 1.5px;
+  background: var(--texto);
+}
+
+/* Menu de navegacion movil */
+.nav {
+  display: none;
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borde);
+  padding: 1rem;
+}
+
+/* Estado desplegado del menu controlado por JavaScript */
+.nav.nav--abierto {
+  display: block;
+}
+
+.nav__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.nav__enlace {
+  display: block;
+  padding: 0.45rem 0.7rem;
+  color: var(--texto-suave);
+  text-decoration: none;
+  font-size: 0.93rem;
+  font-weight: 500;
+  border-radius: var(--radio);
+  transition: color var(--transicion), background var(--transicion);
+}
+
+.nav__enlace:hover,
+.nav__enlace:focus {
+  color: var(--verde-oscuro);
+  background: var(--verde-claro);
+}
+
+/* Contenedor de avisos globales */
+.avisos-globales {
+  width: min(1080px, 90%);
+  margin-inline: auto;
+}
+
+/* Portada principal plana sin degradados */
+.hero {
+  background: var(--fondo);
+  border-bottom: 1px solid var(--borde);
+  padding: 3.5rem 0;
+}
+
+.hero__grid {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.etiqueta {
+  display: inline-block;
+  color: var(--verde-medio);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.hero h1 {
+  font-size: clamp(1.9rem, 3.8vw, 2.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--texto);
+  margin: 0.6rem 0 1rem;
+  font-weight: 700;
+}
+
+.hero__descripcion {
+  color: var(--texto-suave);
+  font-size: 1.05rem;
+  max-width: 58ch;
+  margin: 0;
+}
+
+.hero__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+/* Botones planos con transiciones discretas */
+.btn {
+  display: inline-block;
+  padding: 0.68rem 1.2rem;
+  border-radius: var(--radio);
+  font-size: 0.94rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background var(--transicion), border-color var(--transicion), color var(--transicion);
+}
+
+.btn--primario {
+  background: var(--verde-oscuro);
+  color: #ffffff;
+}
+
+.btn--primario:hover {
+  background: var(--verde-medio);
+}
+
+.btn--secundario {
+  background: transparent;
+  color: var(--texto);
+  border-color: var(--borde-fuerte);
+}
+
+.btn--secundario:hover {
+  background: var(--fondo-claro);
+  border-color: var(--verde-oscuro);
+  color: var(--verde-oscuro);
+}
+
+.btn--bloque {
+  width: 100%;
+}
+
+/* Secciones y encabezados */
+.seccion {
+  padding: 4rem 0;
+}
+
+.seccion--clara {
+  background: var(--fondo-claro);
+  border-top: 1px solid var(--borde);
+  border-bottom: 1px solid var(--borde);
+}
+
+.seccion__encabezado {
+  max-width: 660px;
+  margin-bottom: 2.25rem;
+}
+
+.seccion__encabezado h2 {
+  color: var(--texto);
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.45rem, 2.6vw, 1.9rem);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.seccion__encabezado p {
+  color: var(--texto-suave);
+  margin: 0;
+}
+
+/* Cuadriculas base */
+.grid-metricas,
+.grid-tarjetas,
+.grid-dos-columnas,
+.grid-5r {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.mt-2 {
+  margin-top: 1.5rem;
+}
+
+/* Tarjetas editoriales con borde fino y sin sombras */
+.tarjeta,
+.tarjeta-resumen,
+.tarjeta-r,
+.metrica {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 1.5rem;
+}
+
+.tarjeta h2,
+.tarjeta h3,
+.tarjeta-resumen h2,
+.tarjeta-r h3 {
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.015em;
+  color: var(--texto);
+}
+
+.tarjeta h4 {
+  font-size: 0.92rem;
+  margin: 1rem 0 0.4rem;
+  color: var(--texto);
+}
+
+.tarjeta p,
+.tarjeta-resumen p,
+.tarjeta-r p {
+  color: var(--texto-suave);
+  font-size: 0.95rem;
+}
+
+.tarjeta ul,
+.tarjeta ol {
+  color: var(--texto-suave);
+  font-size: 0.94rem;
+  padding-left: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.tarjeta li {
+  margin-bottom: 0.4rem;
+}
+
+/* Bloque lateral de portada */
+.tarjeta-resumen {
+  background: var(--fondo-claro);
+}
+
+.lista-check,
+.lista-fuentes,
+.lista-acciones {
+  padding-left: 1.15rem;
+}
+
+.destacado-suave {
+  margin-top: 1.25rem;
+  padding: 0.85rem 1rem;
+  background: var(--verde-claro);
+  border-left: 3px solid var(--verde-medio);
+  border-radius: 0 var(--radio) var(--radio) 0;
+  color: var(--verde-oscuro);
+  font-size: 0.92rem;
+}
+
+/* Tarjetas de indicadores numericos */
+.metrica {
+  text-align: left;
+}
+
+.metrica__valor {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--verde-oscuro);
+  margin: 0;
+}
+
+.metrica__etiqueta {
+  margin: 0.35rem 0 0;
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+}
+
+/* Barras de composicion porcentual */
+.barras-datos {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.barras-datos__cabecera {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--texto);
+  margin-bottom: 0.3rem;
+}
+
+.barra {
+  height: 7px;
+  background: var(--fondo-claro);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.barra__relleno {
+  display: block;
+  height: 100%;
+}
+
+.barra--verde { background: var(--verde-medio); }
+.barra--ambar { background: var(--ambar); }
+.barra--azul { background: var(--azul-reciclaje); }
+.barra--gris { background: #7a807c; }
+
+/* Etiqueta editorial con punto indicador y sin recuadro de fondo */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--texto-suave);
+  background: transparent;
+  padding: 0;
+  margin-bottom: 0.75rem;
+}
+
+.badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge--verde::before { background: var(--verde-medio); }
+.badge--azul::before { background: var(--azul-reciclaje); }
+.badge--gris::before { background: #7a807c; }
+.badge--ambar::before { background: var(--ambar); }
+.badge--rojo::before { background: var(--rojo-peligro); }
+
+.tarjeta--borde-verde { border-top: 3px solid var(--verde-medio); }
+.tarjeta--borde-azul { border-top: 3px solid var(--azul-reciclaje); }
+.tarjeta--borde-gris { border-top: 3px solid #8a8f8b; }
+.tarjeta--borde-ambar { border-top: 3px solid var(--ambar); }
+.tarjeta--borde-rojo { border-top: 3px solid var(--rojo-peligro); }
+
+/* Aviso de verificacion previa para centros de acopio */
+.alerta-verificacion {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-left: 3px solid var(--ambar);
+  padding: 1.15rem 1.35rem;
+  border-radius: var(--radio);
+  margin-bottom: 1.5rem;
+  font-size: 0.93rem;
+}
+
+.lista-inline-numerada {
+  margin: 0.6rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--texto-suave);
+  display: grid;
+  gap: 0.25rem;
+}
+
+/* Barra de filtros y controles de formulario */
+.barra-filtros {
+  display: grid;
+  gap: 1rem;
+  background: var(--superficie);
+  padding: 1.2rem;
+  border-radius: var(--radio);
+  border: 1px solid var(--borde);
+  margin-bottom: 1.5rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.barra-filtros .campo {
+  margin-bottom: 0;
+}
+
+.campo label {
+  font-weight: 500;
+  font-size: 0.88rem;
+  color: var(--texto);
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+  font-size: 0.94rem;
+  transition: border-color var(--transicion);
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  border-color: var(--verde-oscuro);
+}
+
+/* Estilo de campos invalidos */
+.campo input.invalido,
+.campo select.invalido,
+.campo textarea.invalido {
+  border-color: var(--rojo-peligro);
+  background: #fdf6f6;
+}
+
+.fieldset-checkbox {
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 0.9rem;
+}
+
+.fieldset-checkbox legend {
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0 0.35rem;
+}
+
+.fieldset-checkbox label {
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  cursor: pointer;
+}
+
+/* Mensajes de estado y validacion */
+.mensaje-error {
+  color: var(--rojo-peligro);
+  font-size: 0.82rem;
+  min-height: 1rem;
+}
+
+.estado-formulario {
+  margin-top: 1rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.estado-formulario--exito { color: var(--verde-oscuro); }
+.estado-formulario--error { color: var(--rojo-peligro); }
+
+.nota-aclaratoria {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.mensaje-vacio {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--superficie);
+  border: 1px dashed var(--borde-fuerte);
+  border-radius: var(--radio);
+  color: var(--texto-suave);
+  margin-bottom: 1.5rem;
+}
+
+/* Contenedor de grafica y resumen estadistico */
+.resumen-datos {
+  margin: 1rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--borde);
+}
+
+.contenedor-grafica {
+  margin-top: 1rem;
+  position: relative;
+  width: 100%;
+}
+
+/* Referencias bibliograficas */
+.lista-fuentes-bibliograficas {
+  padding-left: 1.2rem;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.lista-fuentes-bibliograficas li {
+  margin-bottom: 0.55rem;
+}
+
+/* Utilidad para ocultar elementos dinamicamente */
+.oculto {
+  display: none;
+}
+
+/* Pie de pagina sobrio */
+.pie {
+  background: var(--verde-oscuro);
+  color: #e9efe9;
+  padding: 2.25rem 0;
+  text-align: center;
+  font-size: 0.92rem;
+}
+
+.pie p {
+  margin: 0.25rem 0;
+}
+
+.pie__sub {
+  font-size: 0.85rem;
+  color: #b7c9bf;
+}
+
+/* Adaptacion para tabletas desde 768px */
+@media (min-width: 768px) {
+  .grid-metricas {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid-dos-columnas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-tarjetas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .barra-filtros {
+    grid-template-columns: 1fr 1fr auto;
+    align-items: end;
+  }
+  .grid-5r {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .lista-inline-numerada {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Adaptacion para escritorio desde 1024px */
+@media (min-width: 1024px) {
+  .btn-menu {
+    display: none;
+  }
+  .nav {
+    display: block;
+    position: static;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+  .nav__lista {
+    flex-direction: row;
+    gap: 0.15rem;
+  }
+  .hero {
+    padding: 4.5rem 0;
+  }
+  .hero__grid {
+    grid-template-columns: 1.35fr 0.85fr;
+    align-items: start;
+  }
+  .grid-tarjetas {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid-5r {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  /* Imagen del logotipo dentro del encabezado */
+.marca__logo {
+  display: block;
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+}

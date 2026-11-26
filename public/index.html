@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+
+<head>
+  <!-- Configuracion de codificacion, vista responsiva y metadatos SEO -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Recicla Bajio: sitio web educativo e interactivo sobre separacion de residuos, consumo responsable y centros de acopio en Leon, Guanajuato.">
+  <title>Recicla Bajio | Educacion Ambiental y Reciclaje en Leon, Guanajuato</title>
+
+  <link rel="icon" type="image/png" href="img/logo-recicla-bajio.png">
+
+  <!-- Hoja de estilos principal -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Estilos complementarios para los componentes dinamicos de JS -->
+  <style>
+    .rb-aviso {
+      padding: 0.85rem 1rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      border-left: 4px solid #2f5243;
+      background: #ebf1ed;
+      position: relative;
+    }
+
+    .rb-aviso--error {
+      border-left-color: #8f3535;
+      background: #fdf6f6;
+      color: #8f3535;
+    }
+
+    .rb-aviso--exito {
+      border-left-color: #243e33;
+      background: #e8f5e9;
+      color: #1b5e20;
+    }
+
+    .rb-aviso--advertencia {
+      border-left-color: #8f5b22;
+      background: #fff8e1;
+      color: #7a4b15;
+    }
+
+    .rb-aviso__texto {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .rb-aviso__detalle {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+    }
+
+    .rb-aviso__cerrar {
+      position: absolute;
+      top: 0.4rem;
+      right: 0.6rem;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .rb-error-campo {
+      color: #8f3535;
+      font-size: 0.82rem;
+      margin: 0.25rem 0 0;
+    }
+
+    .campo--con-error input,
+    .campo--con-error select,
+    .campo--con-error textarea {
+      border-color: #8f3535;
+      background: #fdf6f6;
+    }
+
+    .filtro-categoria {
+      padding: 0.45rem 0.9rem;
+      margin: 0.25rem;
+      border: 1px solid #c5c5bb;
+      border-radius: 20px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.88rem;
+    }
+
+    .filtro-categoria--activo {
+      background: #243e33;
+      color: #fff;
+      border-color: #243e33;
+    }
+
+    .tarjeta-residuo {
+      background: #fff;
+      border: 1px solid #deded6;
+      border-top: 3px solid #2f5243;
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+
+    .tarjeta-residuo__categoria {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #2f5243;
+    }
+
+    .tarjeta-residuo__nombre {
+      margin: 0.35rem 0 0.6rem;
+      font-size: 1.15rem;
+    }
+
+    .materiales__grupo {
+      margin-bottom: 0.85rem;
+      padding: 0.65rem;
+      background: #fafaf7;
+      border: 1px solid #deded6;
+      border-radius: 6px;
+    }
+
+    .materiales__categoria {
+      font-weight: 600;
+      margin: 0 0 0.4rem;
+      font-size: 0.9rem;
+      color: #243e33;
+    }
+
+    .material {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .material__nombre {
+      flex: 1;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .material__kg {
+      width: 90px;
+      padding: 0.3rem 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Enlace de accesibilidad para usuarios que navegan con teclado -->
+  <a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
+
+  <!-- Encabezado principal con marca, boton movil y menu de navegacion -->
+  <header class="encabezado" role="banner">
+    <div class="contenedor encabezado__barra">
+      <a href="#inicio" class="marca" aria-label="Recicla Bajio - Inicio">
+        <img src="img/logo-recicla-bajio.png" alt="Logotipo de Recicla Bajio" class="marca__logo">
+        <span class="marca__texto">Recicla <strong>Bajio</strong></span>
+      </a>
+
+      <!-- Boton hamburguesa para pantallas pequenas -->
+      <button id="btn-menu" class="btn-menu" type="button" aria-expanded="false" aria-controls="nav-principal"
+        aria-label="Abrir menu de navegacion">
+        <span class="btn-menu__linea"></span>
+        <span class="btn-menu__linea"></span>
+        <span class="btn-menu__linea"></span>
+      </button>
+
+      <!-- Menu principal consistente hacia todas las secciones del sitio -->
+      <nav id="nav-principal" class="nav" aria-label="Navegacion principal">
+        <ul class="nav__lista">
+          <li><a href="#inicio" class="nav__enlace">Inicio</a></li>
+          <li><a href="#problematica" class="nav__enlace">Problematica</a></li>
+          <li><a href="#catalogo" class="nav__enlace">Catalogo</a></li>
+          <li><a href="#acopio" class="nav__enlace">Centros de Acopio</a></li>
+          <li><a href="#sustentabilidad" class="nav__enlace">Sustentabilidad</a></li>
+          <li><a href="#encuesta" class="nav__enlace">Habitos y Datos</a></li>
+          <li><a href="#contacto" class="nav__enlace">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Contenedor dinamico para notificaciones globales -->
+  <div id="contenedor-avisos" class="avisos-globales" role="status" aria-live="polite"></div>
+
+  <main id="contenido-principal">
+
+    <!-- Modulo 1: Presentacion del proyecto y dimensiones del desarrollo sustentable -->
+    <section id="inicio" class="hero" aria-labelledby="titulo-hero">
+      <div class="contenedor hero__grid">
+        <div class="hero__contenido">
+          <span class="etiqueta">León, Guanajuato · Educacion Ambiental</span>
+          <h1 id="titulo-hero">Separar bien hoy transforma nuestra comunidad mañana</h1>
+          <p class="hero__descripcion">
+            <strong>Recicla Bajio</strong> es una iniciativa educativa e interactiva que acerca informacion
+            confiable sobre separacion de residuos solidos, economia circular, consumo responsable y
+            alternativas de acopio en León, Guanajuato.
+          </p>
+          <div class="hero__acciones">
+            <a href="#catalogo" class="btn btn--primario">Explorar catalogo de residuos</a>
+            <a href="#acopio" class="btn btn--secundario">Buscar centros de acopio</a>
+          </div>
+        </div>
+
+        <!-- Bloque informativo lateral sobre las tres dimensiones sustentables -->
+        <aside class="tarjeta-resumen" aria-label="Dimensiones del desarrollo sustentable">
+          <h2>Desarrollo Sustentable</h2>
+          <p>
+            Satisfacer las necesidades actuales sin comprometer la capacidad de las generaciones futuras,
+            manteniendo equilibrio entre tres dimensiones:
+          </p>
+          <ul class="lista-check">
+            <li><strong>Ambiental:</strong> protege ecosistemas, conserva recursos y reduce la contaminacion.</li>
+            <li><strong>Social:</strong> promueve bienestar, educacion ambiental y participacion ciudadana.</li>
+            <li><strong>Economica:</strong> aprovecha eficientemente los recursos mediante practicas responsables.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Seccion de diagnostico y problematica ambiental en Leon, Guanajuato -->
+    <section id="problematica" class="seccion seccion--clara" aria-labelledby="titulo-problematica">
+      <div class="contenedor">
+        <header class="seccion__encabezado">
+          <h2 id="titulo-problematica">Problematica Ambiental en Leon, Guanajuato</h2>
+          <p>
+            El crecimiento poblacional y el consumo de materiales desechables incrementan los residuos solidos diarios.
+            Sin clasificacion adecuada, contaminan suelo, agua y aire, desaprovechando materiales valiosos.
+          </p>
+        </header>
+
+        <!-- Indicadores territoriales y de generacion diaria -->
+        <div class="grid-metricas" role="list">
+          <article class="metrica" role="listitem">
+            <p class="metrica__valor">1,811,061</p>
+            <p class="metrica__etiqueta">Habitantes aproximados en 569 localidades (IPLANEG)</p>
+          </article>
+          <article class="metrica" role="listitem">
+            <p class="metrica__valor">1,221.6 km2</p>
+            <p class="metrica__etiqueta">Superficie territorial del municipio de Leon</p>
+          </article>
+          <article class="metrica" role="listitem">
+            <p class="metrica__valor">1,768.51 t/dia</p>
+            <p class="metrica__etiqueta">Generacion diaria documentada en 2020 (linea base historica)</p>
+          </article>
+        </div>
+
+        <!-- Detalle de composicion porcentual y fuentes generadoras -->
+        <div class="grid-dos-columnas mt-2">
+          <article class="tarjeta">
+            <h3>Composicion de residuos domesticos (Linea base 2020)</h3>
+            <p class="nota-aclaratoria">
+              Nota: Cifras del Programa para la Prevencion y Gestion Integral de Residuos de Leon
+              (estudio 2024). Corresponden a una linea base historica de 2020 y no a una medicion actual de 2026.
+            </p>
+            <ul class="barras-datos">
+              <li>
+                <div class="barras-datos__cabecera"><span>Residuos organicos</span><strong>49%</strong></div>
+                <div class="barra"><span style="width: 49%;" class="barra__relleno barra--verde"></span></div>
+              </li>
+              <li>
+                <div class="barras-datos__cabecera"><span>Inorganicos combustibles</span><strong>25%</strong></div>
+                <div class="barra"><span style="width: 25%;" class="barra__relleno barra--ambar"></span></div>
+              </li>
+              <li>
+                <div class="barras-datos__cabecera"><span>Materiales reciclables</span><strong>19%</strong></div>
+                <div class="barra"><span style="width: 19%;" class="barra__relleno barra--azul"></span></div>
+              </li>
+              <li>
+                <div class="barras-datos__cabecera"><span>Materiales descartables</span><strong>7%</strong></div>
+                <div class="barra"><span style="width: 7%;" class="barra__relleno barra--gris"></span></div>
+              </li>
+            </ul>
+          </article>
+
+          <article class="tarjeta">
+            <h3>Principales fuentes de generacion en el municipio</h3>
+            <ul class="lista-fuentes">
+              <li><strong>Hogares:</strong> restos de alimentos, envases, papel, carton y empaques.</li>
+              <li><strong>Comercios:</strong> embalajes, carton, plasticos y residuos de establecimientos.</li>
+              <li><strong>Industrias:</strong> materiales de produccion, metales, plasticos y empaques.</li>
+              <li><strong>Instituciones educativas:</strong> papel, carton, botellas, envolturas y residuos
+                electronicos.</li>
+              <li><strong>Actividades agricolas:</strong> residuos organicos, vegetales y materiales del campo.</li>
+            </ul>
+            <p class="destacado-suave">
+              Separar desde el origen evita que los residuos organicos contaminen papel, carton y plasticos reciclables.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modulo 2: Catalogo interactivo de residuos conectado a CatalogoControlador.js -->
+    <section id="catalogo" class="seccion" aria-labelledby="titulo-catalogo">
+      <div class="contenedor">
+        <header class="seccion__encabezado">
+          <h2 id="titulo-catalogo">Catalogo de Residuos y Guia de Separacion</h2>
+          <p>
+            No todo residuo es basura. Consulta como identificar, preparar y separar cada material antes de desecharlo.
+          </p>
+        </header>
+
+        <div id="catalogo-aviso"></div>
+
+        <!-- Formulario de filtrado escuchado por CatalogoControlador.js -->
+        <form id="form-filtro-catalogo" class="barra-filtros" role="search" aria-label="Filtrar catalogo de residuos">
+          <div class="campo" style="grid-column: span 2;">
+            <label for="buscador-residuos">Buscar material o residuo</label>
+            <input type="search" id="buscador-residuos" name="q"
+              placeholder="Ej. PET, carton, pilas, cascaras, celular..." autocomplete="off">
+          </div>
+
+          <div class="campo campo--accion">
+            <button type="button" id="limpiar-filtros" class="btn btn--secundario">Limpiar filtros</button>
+          </div>
+        </form>
+
+        <!-- Botones de categoria generados dinamicamente desde la API -->
+        <div id="filtro-categorias" style="margin-bottom: 1rem;"></div>
+
+        <p id="catalogo-contador" class="nota-aclaratoria"></p>
+
+        <!-- Contenedor de tarjetas poblado por CatalogoVista.js desde MySQL -->
+        <div id="catalogo-resultados" class="grid-tarjetas"></div>
+      </div>
+    </section>
+
+    <!-- Modulo 3: Directorio de centros de acopio con filtros y aviso de verificacion -->
+    <section id="acopio" class="seccion seccion--clara" aria-labelledby="titulo-acopio">
+      <div class="contenedor">
+        <header class="seccion__encabezado">
+          <h2 id="titulo-acopio">Directorio de Centros de Acopio en Leon</h2>
+          <p>
+            Consulta alternativas municipales y privadas. El <strong>SIAP</strong> y la
+            <strong>Direccion General de Medio Ambiente de Leon</strong> son referencias institucionales clave.
+          </p>
+        </header>
+
+        <!-- Aviso obligatorio para verificar condiciones antes de trasladar residuos -->
+        <div class="alerta-verificacion" role="note">
+          <strong>Antes de acudir a un centro de acopio, confirma siempre:</strong>
+          <ol class="lista-inline-numerada">
+            <li>Que materiales reciben actualmente.</li>
+            <li>Horarios de atencion vigentes.</li>
+            <li>Si requieren materiales limpios y secos.</li>
+            <li>Si existe cantidad minima de recepcion.</li>
+            <li>Si ofrecen compensacion economica o recepcion gratuita.</li>
+            <li>Que el establecimiento continue operando.</li>
+          </ol>
+        </div>
+
+        <!-- Filtros de material y zona -->
+        <form id="form-filtro-acopio" class="barra-filtros" role="search" aria-label="Filtrar centros de acopio">
+          <div class="campo">
+            <label for="filtro-material-acopio">Material que deseas entregar</label>
+            <select id="filtro-material-acopio" name="material">
+              <option value="">Todos los materiales</option>
+              <option value="Papel y Cartón">Papel y Carton</option>
+              <option value="Plásticos">Plasticos / PET</option>
+              <option value="Vidrio">Vidrio</option>
+              <option value="Metales">Aluminio y Metales</option>
+              <option value="Electrónicos (RAEE)">Residuos Electronicos</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="filtro-zona-acopio">Zona / Localidad</label>
+            <select id="filtro-zona-acopio" name="zona">
+              <option value="">Todas las zonas de Leon</option>
+              <option value="Centro">Zona Centro</option>
+              <option value="Norte">Zona Norte</option>
+              <option value="Sur">Zona Sur</option>
+              <option value="Oriente">Zona Oriente</option>
+              <option value="Poniente">Zona Poniente</option>
+            </select>
+          </div>
+        </form>
+
+        <!-- Contenedor poblado directamente desde GET /api/acopio -->
+        <div id="lista-acopio" class="grid-tarjetas"></div>
+      </div>
+    </section>
+
+    <!-- Modulo 7: Economia circular, consumo responsable y recuperadores urbanos -->
+    <section id="sustentabilidad" class="seccion" aria-labelledby="titulo-sustentabilidad">
+      <div class="contenedor">
+        <header class="seccion__encabezado">
+          <h2 id="titulo-sustentabilidad">Economia Circular y Consumo Responsable</h2>
+          <p>
+            A diferencia del modelo lineal (extraer, producir, consumir y desechar), la economia circular mantiene
+            los materiales en uso el mayor tiempo posible.
+          </p>
+        </header>
+
+        <!-- Principios de las 5R -->
+        <div class="grid-5r">
+          <article class="tarjeta-r">
+            <h3>1. Reducir</h3>
+            <p>Disminuir el consumo innecesario y evitar empaques excesivos usando bolsas reutilizables.</p>
+          </article>
+          <article class="tarjeta-r">
+            <h3>2. Reutilizar</h3>
+            <p>Dar un segundo uso a los objetos, como frascos de vidrio y recipientes organizadores.</p>
+          </article>
+          <article class="tarjeta-r">
+            <h3>3. Reparar</h3>
+            <p>Prolongar la vida util de electrodomesticos, muebles y dispositivos electronicos antes de reemplazarlos.
+            </p>
+          </article>
+          <article class="tarjeta-r">
+            <h3>4. Recuperar</h3>
+            <p>Rescatar metales, papel, carton y plasticos para reincorporarlos a cadenas productivas.</p>
+          </article>
+          <article class="tarjeta-r">
+            <h3>5. Reciclar</h3>
+            <p>Transformar materiales recuperados en materia prima para fabricar nuevos productos.</p>
+          </article>
+        </div>
+
+        <!-- Recomendaciones practicas y reconocimiento a recuperadores urbanos -->
+        <div class="grid-dos-columnas mt-2">
+          <article class="tarjeta">
+            <h3>Acciones cotidianas por entorno</h3>
+            <ul class="lista-acciones">
+              <li><strong>En el hogar:</strong> separa organicos e inorganicos, evita desperdicio de alimentos y ahorra
+                agua y energia.</li>
+              <li><strong>En la escuela:</strong> usa papel de forma responsable, reutiliza utiles y organiza campanas
+                ambientales.</li>
+              <li><strong>En comercios:</strong> reduce embalajes innecesarios, separa carton y plasticos y promueve
+                opciones retornables.</li>
+              <li><strong>En la comunidad:</strong> participa en jornadas de limpieza, recoleccion electronica y
+                comparte informacion verificada.</li>
+            </ul>
+          </article>
+
+          <article class="tarjeta">
+            <h3>Recuperadores Urbanos y Beneficios Comunitarios</h3>
+            <p>
+              Un estudio academico publicado en 2024 destaca el papel clave de los <strong>recuperadores urbanos en
+                Leon</strong>:
+              su labor recupera materiales valiosos, impulsa la economia circular, genera sustento economico y reduce
+              el volumen enviado a disposicion final.
+            </p>
+            <ul class="lista-check">
+              <li><strong>Beneficios ambientales:</strong> menos extraccion de materias primas y menor contaminacion.
+              </li>
+              <li><strong>Beneficios sociales:</strong> cultura de corresponsabilidad y reconocimiento comunitario.</li>
+              <li><strong>Beneficios economicos:</strong> valorizacion de materiales y oportunidades de emprendimiento.
+              </li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modulos 4 y 5: Cuestionario de habitos y panel de resultados estadisticos -->
+    <section id="encuesta" class="seccion seccion--clara" aria-labelledby="titulo-encuesta">
+      <div class="contenedor">
+        <header class="seccion__encabezado">
+          <h2 id="titulo-encuesta">Cuestionario de Habitos y Resultados</h2>
+          <p>
+            Participacion voluntaria y anonima. Registra tus habitos de separacion para visualizar un resumen
+            y contribuir al diagnostico comunitario.
+          </p>
+        </header>
+
+        <div id="encuesta-avisos"></div>
+
+        <div class="grid-dos-columnas">
+          <!-- Formulario conectado exactamente con EncuestaControlador.js y EncuestaVista.js -->
+          <div>
+            <form id="form-encuesta" class="tarjeta formulario" novalidate>
+              <h3>Registra tus habitos de reciclaje</h3>
+
+              <div class="campo" data-campo="colonia_zona">
+                <label for="encuesta-colonia">Colonia o zona *</label>
+                <input type="text" id="encuesta-colonia" name="colonia_zona"
+                  placeholder="Ej. Zona Centro, Jardines del Moral">
+              </div>
+
+              <div class="campo" data-campo="separa_residuos">
+                <label for="habito-separacion">¿Separas tus residuos en casa? *</label>
+                <select id="habito-separacion" name="separa_residuos">
+                  <option value="">Selecciona una opcion</option>
+                  <option value="Siempre">Siempre</option>
+                  <option value="A veces">A veces</option>
+                  <option value="Nunca">Nunca</option>
+                </select>
+              </div>
+
+              <div class="campo" data-campo="reutiliza">
+                <label for="habito-reutiliza">¿Reutilizas envases o bolsas? *</label>
+                <select id="habito-reutiliza" name="reutiliza">
+                  <option value="">Selecciona una opcion</option>
+                  <option value="Siempre">Siempre</option>
+                  <option value="A veces">A veces</option>
+                  <option value="Nunca">Nunca</option>
+                </select>
+              </div>
+
+              <div class="campo" data-campo="conoce_acopios">
+                <label for="conoce-acopio">¿Conoces algun centro de acopio cercano? *</label>
+                <select id="conoce-acopio" name="conoce_acopios">
+                  <option value="">Selecciona una opcion</option>
+                  <option value="1">Sí</option>
+                  <option value="0">No</option>
+                </select>
+              </div>
+
+              <div class="campo" data-campo="frecuencia_entrega">
+                <label for="frecuencia-entrega">¿Cada cuanto llevas residuos a reciclar? *</label>
+                <select id="frecuencia-entrega" name="frecuencia_entrega">
+                  <option value="">Selecciona una opcion</option>
+                  <option value="Semanal">Semanal</option>
+                  <option value="Quincenal">Quincenal</option>
+                  <option value="Mensual">Mensual</option>
+                  <option value="Nunca">Nunca</option>
+                </select>
+              </div>
+
+              <div class="campo" data-campo="materiales">
+                <label>Materiales que separas (y kilos aproximados al mes)</label>
+                <div id="encuesta-materiales"></div>
+              </div>
+
+              <div class="campo" data-campo="consentimiento">
+                <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                  <input type="checkbox" name="consentimiento" value="si">
+                  Acepto participar de forma voluntaria y anonima *
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn--primario btn--bloque">Enviar respuesta</button>
+            </form>
+
+            <!-- Resumen de respuestas generado por EncuestaVista.js -->
+            <div id="encuesta-resumen" class="tarjeta" hidden></div>
+          </div>
+
+          <!-- Panel de estadisticas en tiempo real desde GET /api/estadisticas -->
+          <aside class="tarjeta panel-estadisticas" aria-labelledby="titulo-estadisticas">
+            <h3 id="titulo-estadisticas">Resumen Estadistico Comunitario</h3>
+            <p class="nota-aclaratoria">
+              Datos acumulados en tiempo real desde la base de datos de Recicla Bajio.
+            </p>
+            <div id="panel-estadisticas-bd" class="resumen-datos">
+              <p>Cargando estadisticas desde el servidor...</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modulo 7: Formulario de retroalimentacion y referencias bibliograficas -->
+    <section id="contacto" class="seccion" aria-labelledby="titulo-contacto">
+      <div class="contenedor grid-dos-columnas">
+        <!-- Formulario gestionado por ContactoControlador.js -->
+        <form id="form-contacto" class="tarjeta formulario" novalidate>
+          <h2 id="titulo-contacto">Contacto y Retroalimentacion</h2>
+          <p class="nota-aclaratoria">
+            Recoleccion minima de datos. En modo demostrativo sin servidor institucional, los comentarios no se
+            envian a dependencias gubernamentales.
+          </p>
+
+          <div id="contacto-avisos"></div>
+
+          <!-- Trampa antispam oculta esperada por ContactoControlador.js -->
+          <input type="text" name="sitio_web" style="display:none" tabindex="-1" autocomplete="off">
+
+          <div class="campo" data-campo="nombre">
+            <label for="contacto-nombre">Nombre o alias (opcional)</label>
+            <input type="text" id="contacto-nombre" name="nombre" placeholder="Tu nombre">
+          </div>
+
+          <div class="campo" data-campo="correo">
+            <label for="contacto-correo">Correo electronico *</label>
+            <input type="email" id="contacto-correo" name="correo" placeholder="ejemplo@correo.com">
+          </div>
+
+          <div class="campo" data-campo="tipo_mensaje">
+            <label for="contacto-tipo">Tipo de mensaje *</label>
+            <select id="contacto-tipo" name="tipo_mensaje">
+              <option value="comentario">Comentario general</option>
+              <option value="sugerencia">Sugerencia de centro de acopio</option>
+              <option value="error_datos">Reportar error en datos</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="campo" data-campo="mensaje">
+            <label for="contacto-mensaje">Mensaje o sugerencia de centro de acopio *</label>
+            <textarea id="contacto-mensaje" name="mensaje" rows="4" placeholder="Escribe tu comentario..."></textarea>
+            <small id="contador-mensaje" class="nota-aclaratoria"></small>
+          </div>
+
+          <button type="submit" class="btn btn--primario">Enviar comentario</button>
+        </form>
+
+        <!-- Listado de fuentes institucionales que respaldan el contenido del sitio -->
+        <aside class="tarjeta" aria-labelledby="titulo-fuentes">
+          <h2 id="titulo-fuentes">Fuentes de Consulta</h2>
+          <ol class="lista-fuentes-bibliograficas">
+            <li>Instituto de Planeacion, Estadistica y Geografia del Estado de Guanajuato (IPLANEG).</li>
+            <li>Sistema Integral de Aseo Publico de Leon (SIAP). Programa para la Prevencion y Gestion Integral de
+              Residuos Solidos.</li>
+            <li>SEMARNAT. Clasificacion, separacion y aprovechamiento de residuos solidos urbanos.</li>
+            <li>SEMARNAT. Norma Oficial Mexicana NOM-161-SEMARNAT-2011 (residuos de manejo especial).</li>
+            <li>Ley General para la Prevencion y Gestion Integral de los Residuos (LGPGIR).</li>
+            <li>Estudio academico (2024) sobre la contribucion economica y ambiental de los recuperadores urbanos en
+              Leon, Guanajuato.</li>
+            <li>Primer Informe de Gobierno Municipal de Leon, Guanajuato, Administracion 2024-2027.</li>
+            <li>Diagnostico municipal de desarrollo urbano y generacion de residuos solidos de Leon.</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pie de pagina institucional del proyecto -->
+  <footer class="pie" role="contentinfo">
+    <div class="contenedor pie__contenido">
+      <p><strong>Recicla Bajio</strong> · Proyecto Integrador de Programacion Web y Desarrollo Sustentable (Leon, Gto.).
+      </p>
+      <p class="pie__sub">Aplicacion educativa, accesible y orientada a la economia circular.</p>
+    </div>
+  </footer>
+
+  <!-- Carga ordenada de dependencias JS (sin type="module" para compatibilidad global) -->
+  <script src="js/datos/residuosLocales.js"></script>
+  <script src="js/utils/herramientas.js"></script>
+  <script src="js/utils/Avisos.js"></script>
+  <script src="js/utils/Validador.js"></script>
+  <script src="js/utils/http.js"></script>
+  <script src="js/modelos/ResiduoModelo.js"></script>
+  <script src="js/modelos/EncuestaModelo.js"></script>
+  <script src="js/vistas/CatalogoVista.js"></script>
+  <script src="js/vistas/EncuestaVista.js"></script>
+  <script src="js/controladores/CatalogoControlador.js"></script>
+  <script src="js/controladores/EncuestaControlador.js"></script>
+  <script src="js/controladores/ContactoControlador.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Conexion directa para menu movil, Centros de Acopio (/api/acopio) y Estadisticas (/api/estadisticas) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Menu hamburguesa movil
+      const btnMenu = document.getElementById('btn-menu');
+      const navPrincipal = document.getElementById('nav-principal');
+      if (btnMenu && navPrincipal) {
+        btnMenu.addEventListener('click', () => {
+          const abierto = navPrincipal.classList.toggle('nav--abierto');
+          btnMenu.setAttribute('aria-expanded', String(abierto));
+        });
+      }
+
+      // 2. Cargar Centros de Acopio desde GET /api/acopio
+      const listaAcopio = document.getElementById('lista-acopio');
+      const filtroMat = document.getElementById('filtro-material-acopio');
+      const filtroZona = document.getElementById('filtro-zona-acopio');
+
+      async function cargarAcopios() {
+        if (!listaAcopio) return;
+        try {
+          let url = '/api/acopio';
+          if (filtroZona && filtroZona.value) {
+            url = `/api/acopio/localidad?localidad=${encodeURIComponent(filtroZona.value)}`;
+          } else if (filtroMat && filtroMat.value) {
+            url = `/api/acopio/materiales?categoria=${encodeURIComponent(filtroMat.value)}`;
+          }
+          const res = await pedirJSON(url);
+          const centros = res.datos || res.data || res || [];
+          if (!centros.length) {
+            listaAcopio.innerHTML = '<p class="mensaje-vacio">No hay centros de acopio con ese filtro.</p>';
+            return;
+          }
+          listaAcopio.innerHTML = centros.map(c => `
+            <article class="tarjeta tarjeta--borde-verde">
+              <span class="badge badge--verde">${c.tipo || 'Centro de Acopio'}</span>
+              <h3>${c.nombre}</h3>
+              <p><strong>Dirección:</strong> ${c.direccion || 'León, Gto.'}</p>
+              <p><strong>Horario:</strong> ${c.horario || 'Consultar disponibilidad'}</p>
+              <p><strong>Materiales:</strong> ${c.materiales || 'Varios materiales reciclables'}</p>
+            </article>
+          `).join('');
+        } catch (e) {
+          listaAcopio.innerHTML = '<p class="nota-aclaratoria">No se pudieron cargar los centros de acopio desde el servidor.</p>';
+        }
+      }
+
+      filtroMat?.addEventListener('change', () => { if (filtroZona) filtroZona.value = ''; cargarAcopios(); });
+      filtroZona?.addEventListener('change', () => { if (filtroMat) filtroMat.value = ''; cargarAcopios(); });
+      cargarAcopios();
+
+      // 3. Cargar Estadisticas desde GET /api/estadisticas
+      const panelEst = document.getElementById('panel-estadisticas-bd');
+      if (panelEst) {
+        try {
+          const est = await pedirJSON('/api/estadisticas');
+          const habitos = est.habitos_separacion || est.habitos || [];
+          const ranking = est.ranking_materiales || est.materiales || [];
+          panelEst.innerHTML = `
+              <h4>Hábitos de separación reportados</h4>
+              <ul>
+                ${habitos.map(h => {
+            const etiqueta = h.separa_residuos || h.habito || h.categoria || h.opcion || Object.values(h)[0];
+            return `<li><strong>${etiqueta}:</strong> ${h.total} respuestas (${h.porcentaje}%)</li>`;
+          }).join('') || '<li>Sin respuestas aún</li>'}
+              </ul>
+              <h4>Ranking de materiales recuperados (kg)</h4>
+              <ul>
+                ${ranking.map(r => {
+            const mat = r.nombre || r.material || r.residuo || Object.values(r)[0];
+            return `<li><strong>${mat}:</strong> ${r.total_kg} kg</li>`;
+          }).join('') || '<li>Sin datos registrados</li>'}
+              </ul>
+            `;
+        } catch (e) {
+          panelEst.innerHTML = '<p class="nota-aclaratoria">Envia tu respuesta para comenzar a generar estadisticas.</p>';
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
