@@ -145,6 +145,58 @@
       width: 90px;
       padding: 0.3rem 0.5rem;
     }
+
+    /* Estilos para barra y modal de autenticacion / roles */
+    .auth-barra {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .auth-badge {
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+      background: #ebf1ed;
+      color: #243e33;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .auth-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 1000;
+    }
+
+    .auth-modal[hidden] {
+      display: none;
+    }
+
+    .auth-modal__caja {
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .tabla-usuarios {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .tabla-usuarios th,
+    .tabla-usuarios td {
+      padding: 0.6rem;
+      border-bottom: 1px solid #deded6;
+      text-align: left;
+    }
   </style>
 </head>
 
@@ -178,10 +230,60 @@
           <li><a href="#sustentabilidad" class="nav__enlace">Sustentabilidad</a></li>
           <li><a href="#encuesta" class="nav__enlace">Habitos y Datos</a></li>
           <li><a href="#contacto" class="nav__enlace">Contacto</a></li>
+          <li data-rol-colaborador hidden><a href="#panel-roles" class="nav__enlace">Gestión</a></li>
         </ul>
       </nav>
+
+      <!-- Controles de sesion de usuario -->
+      <div class="auth-barra">
+        <button type="button" id="btn-abrir-auth" class="btn btn--secundario">Iniciar sesión</button>
+        <span id="usuario-activo-badge" class="auth-badge" hidden></span>
+        <button type="button" id="btn-cerrar-sesion" class="btn btn--secundario" hidden>Salir</button>
+      </div>
     </div>
   </header>
+
+  <!-- Modal de Inicio de Sesion y Registro -->
+  <div id="seccion-auth" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-titulo" hidden>
+    <div class="tarjeta auth-modal__caja">
+      <h2 id="auth-titulo">Iniciar sesión</h2>
+      <p class="nota-aclaratoria" id="auth-subtitulo">Accede con tu cuenta de participante, colaborador o administrador.
+      </p>
+
+      <div id="auth-avisos"></div>
+
+      <form id="form-auth" class="formulario" novalidate>
+        <div class="campo" id="campo-nombre-usuario" hidden>
+          <label for="auth-nombre">Nombre de usuario *</label>
+          <input type="text" id="auth-nombre" name="nombre_usuario" minlength="3" maxlength="50"
+            placeholder="Ej. mayra_leon">
+        </div>
+
+        <div class="campo">
+          <label for="auth-correo">Correo electrónico *</label>
+          <input type="email" id="auth-correo" name="correo" required placeholder="ejemplo@correo.com">
+        </div>
+
+        <div class="campo">
+          <label for="auth-password">Contraseña *</label>
+          <input type="password" id="auth-password" name="password" required minlength="8"
+            placeholder="Mínimo 8 caracteres">
+        </div>
+
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;">
+          <button type="submit" id="btn-submit-auth" class="btn btn--primario">Entrar</button>
+          <button type="button" id="btn-cerrar-auth" class="btn btn--secundario">Cancelar</button>
+        </div>
+
+        <p style="margin-top:0.85rem; margin-bottom:0;">
+          <button type="button" id="btn-cambiar-modo"
+            style="background:none; border:none; color:#243e33; text-decoration:underline; cursor:pointer; padding:0;">
+            ¿No tienes cuenta? Regístrate como participante
+          </button>
+        </p>
+      </form>
+    </div>
+  </div>
 
   <!-- Contenedor dinamico para notificaciones globales -->
   <div id="contenedor-avisos" class="avisos-globales" role="status" aria-live="polite"></div>
@@ -462,7 +564,7 @@
       <div class="contenedor">
         <header class="seccion__encabezado">
           <h2 id="titulo-encuesta">Cuestionario de Habitos y Resultados</h2>
-          <p>
+          <p id="encuesta-subtitulo-sesion">
             Participacion voluntaria y anonima. Registra tus habitos de separacion para visualizar un resumen
             y contribuir al diagnostico comunitario.
           </p>
@@ -551,6 +653,86 @@
               <p>Cargando estadisticas desde el servidor...</p>
             </div>
           </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Paneles Exclusivos por Rol (Colaborador y Administrador) -->
+    <section id="panel-roles" class="seccion seccion--clara" data-rol-colaborador hidden
+      aria-labelledby="titulo-panel-roles">
+      <div class="contenedor">
+        <header class="seccion__encabezado">
+          <h2 id="titulo-panel-roles">Panel de Gestión del Sistema</h2>
+          <p>Funciones habilitadas según tu nivel de autorización en la plataforma.</p>
+        </header>
+
+        <div class="grid-dos-columnas">
+          <!-- Visible para Colaborador y Admin -->
+          <form id="form-nuevo-residuo" class="tarjeta formulario" data-rol-colaborador hidden>
+            <h3>Agregar Material al Catálogo (Colaborador / Admin)</h3>
+            <div id="admin-residuo-avisos"></div>
+
+            <div class="campo">
+              <label for="res-nombre">Nombre del material *</label>
+              <input type="text" id="res-nombre" name="nombre" required placeholder="Ej. Botellas de Vidrio Ámbar">
+            </div>
+
+            <div class="campo">
+              <label for="res-categoria">Categoría *</label>
+              <select id="res-categoria" name="categoria" required>
+                <option value="Plásticos">Plásticos</option>
+                <option value="Papel y Cartón">Papel y Cartón</option>
+                <option value="Vidrio">Vidrio</option>
+                <option value="Metales">Metales</option>
+                <option value="Electrónicos (RAEE)">Electrónicos (RAEE)</option>
+                <option value="Orgánicos">Orgánicos</option>
+                <option value="Manejo Especial">Manejo Especial</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="res-preparacion">Preparación requerida *</label>
+              <input type="text" id="res-preparacion" name="preparacion" required
+                placeholder="Ej. Limpio, seco y sin tapa">
+            </div>
+
+            <div class="campo">
+              <label for="res-instrucciones">Instrucciones de separación *</label>
+              <textarea id="res-instrucciones" name="instrucciones" rows="3" required
+                placeholder="Describe cómo debe separarse..."></textarea>
+            </div>
+
+            <div class="campo">
+              <label for="res-fuente">Fuente institucional *</label>
+              <input type="text" id="res-fuente" name="fuente_info" required value="SIAP León / SEMARNAT">
+            </div>
+
+            <button type="submit" class="btn btn--primario">Guardar en catálogo</button>
+          </form>
+
+          <!-- Visible exclusivamente para Admin -->
+          <div class="tarjeta" data-rol-admin hidden>
+            <h3>Administración de Usuarios y Roles (Admin)</h3>
+            <p class="nota-aclaratoria">Asigna permisos de participante, colaborador o administrador a las cuentas
+              registradas.</p>
+            <div id="admin-usuarios-avisos"></div>
+            <div style="overflow-x:auto;">
+              <table class="tabla-usuarios">
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-usuarios-body">
+                  <tr>
+                    <td colspan="3">Inicia sesión como administrador para ver los usuarios.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -645,7 +827,7 @@
   <script src="js/controladores/ContactoControlador.js"></script>
   <script src="js/app.js"></script>
 
-  <!-- Conexion directa para menu movil, Centros de Acopio (/api/acopio) y Estadisticas (/api/estadisticas) -->
+  <!-- Conexion directa para menu movil, Centros de Acopio, Estadisticas y Usuarios/Roles -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       // 1. Menu hamburguesa movil
@@ -723,6 +905,169 @@
           panelEst.innerHTML = '<p class="nota-aclaratoria">Envia tu respuesta para comenzar a generar estadisticas.</p>';
         }
       }
+
+      // 4. Sistema de Usuarios y Permisos por Rol (visitante, participante, colaborador, admin)
+      let modoRegistro = false;
+      const modalAuth = document.getElementById('seccion-auth');
+      const formAuth = document.getElementById('form-auth');
+      const avisosAuth = document.getElementById('auth-avisos');
+
+      document.getElementById('btn-abrir-auth')?.addEventListener('click', () => {
+        avisosAuth.innerHTML = '';
+        modalAuth.hidden = false;
+      });
+
+      document.getElementById('btn-cerrar-auth')?.addEventListener('click', () => {
+        modalAuth.hidden = true;
+      });
+
+      document.getElementById('btn-cambiar-modo')?.addEventListener('click', () => {
+        modoRegistro = !modoRegistro;
+        document.getElementById('campo-nombre-usuario').hidden = !modoRegistro;
+        document.getElementById('auth-titulo').textContent = modoRegistro ? 'Crear cuenta' : 'Iniciar sesión';
+        document.getElementById('auth-subtitulo').textContent = modoRegistro
+          ? 'Regístrate como participante para vincular tus encuestas a tu cuenta.'
+          : 'Accede con tu cuenta de participante, colaborador o administrador.';
+        document.getElementById('btn-submit-auth').textContent = modoRegistro ? 'Registrarme' : 'Entrar';
+        document.getElementById('btn-cambiar-modo').textContent = modoRegistro
+          ? '¿Ya tienes cuenta? Inicia sesión'
+          : '¿No tienes cuenta? Regístrate como participante';
+      });
+
+      formAuth?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        avisosAuth.innerHTML = '';
+        const datos = Object.fromEntries(new FormData(formAuth));
+        const endpoint = modoRegistro ? '/api/auth/register' : '/api/auth/login';
+
+        try {
+          const res = await pedirJSON(endpoint, {
+            method: 'POST',
+            body: JSON.stringify(datos),
+          });
+          localStorage.setItem('rb_token', res.token);
+          localStorage.setItem('rb_usuario', JSON.stringify(res.usuario));
+          modalAuth.hidden = true;
+          formAuth.reset();
+          actualizarInterfazRoles();
+        } catch (err) {
+          avisosAuth.innerHTML = `<div class="rb-aviso rb-aviso--error"><p class="rb-aviso__texto">${err.message || 'Credenciales incorrectas.'}</p></div>`;
+        }
+      });
+
+      document.getElementById('btn-cerrar-sesion')?.addEventListener('click', async () => {
+        const token = localStorage.getItem('rb_token');
+        if (token) {
+          try {
+            await pedirJSON('/api/auth/logout', {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${token}` },
+            });
+          } catch (_) { }
+        }
+        localStorage.removeItem('rb_token');
+        localStorage.removeItem('rb_usuario');
+        actualizarInterfazRoles();
+      });
+
+      // Accion de Colaborador / Admin: agregar nuevo residuo
+      document.getElementById('form-nuevo-residuo')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const avisosRes = document.getElementById('admin-residuo-avisos');
+        const token = localStorage.getItem('rb_token');
+        const datos = Object.fromEntries(new FormData(e.target));
+
+        try {
+          await pedirJSON('/api/residuos', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(datos),
+          });
+          e.target.reset();
+          avisosRes.innerHTML = '<div class="rb-aviso rb-aviso--exito"><p class="rb-aviso__texto">Material agregado al catálogo correctamente.</p></div>';
+        } catch (err) {
+          avisosRes.innerHTML = `<div class="rb-aviso rb-aviso--error"><p class="rb-aviso__texto">${err.message || 'No se pudo guardar el material.'}</p></div>`;
+        }
+      });
+
+      // Accion de Admin: cargar lista de usuarios y permitir cambiar roles
+      async function cargarUsuariosAdmin() {
+        const tbody = document.getElementById('tabla-usuarios-body');
+        const token = localStorage.getItem('rb_token');
+        if (!tbody || !token) return;
+
+        try {
+          const usuarios = await pedirJSON('/api/usuarios', {
+            headers: { 'Authorization': `Bearer ${token}` },
+          });
+          tbody.innerHTML = usuarios.map(u => `
+            <tr>
+              <td>${u.nombre_usuario}</td>
+              <td>${u.correo}</td>
+              <td>
+                <select data-id-usuario="${u.id_usuario}" class="selector-rol-usuario">
+                  <option value="visitante" ${u.rol === 'visitante' ? 'selected' : ''}>visitante</option>
+                  <option value="participante" ${u.rol === 'participante' ? 'selected' : ''}>participante</option>
+                  <option value="colaborador" ${u.rol === 'colaborador' ? 'selected' : ''}>colaborador</option>
+                  <option value="admin" ${u.rol === 'admin' ? 'selected' : ''}>admin</option>
+                </select>
+              </td>
+            </tr>
+          `).join('');
+
+          tbody.querySelectorAll('.selector-rol-usuario').forEach(sel => {
+            sel.addEventListener('change', async (ev) => {
+              const id = ev.target.dataset.idUsuario;
+              const nuevoRol = ev.target.value;
+              const avisosUsr = document.getElementById('admin-usuarios-avisos');
+              try {
+                await pedirJSON(`/api/usuarios/${id}`, {
+                  method: 'PATCH',
+                  headers: { 'Authorization': `Bearer ${token}` },
+                  body: JSON.stringify({ rol: nuevoRol }),
+                });
+                avisosUsr.innerHTML = '<div class="rb-aviso rb-aviso--exito"><p class="rb-aviso__texto">Rol actualizado correctamente.</p></div>';
+              } catch (err) {
+                avisosUsr.innerHTML = `<div class="rb-aviso rb-aviso--error"><p class="rb-aviso__texto">${err.message || 'Error al actualizar el rol.'}</p></div>`;
+              }
+            });
+          });
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="3">${err.message || 'No se pudieron cargar los usuarios.'}</td></tr>`;
+        }
+      }
+
+      function actualizarInterfazRoles() {
+        const usuario = JSON.parse(localStorage.getItem('rb_usuario') || 'null');
+        const rol = usuario?.rol || 'visitante';
+
+        document.getElementById('btn-abrir-auth').hidden = !!usuario;
+        document.getElementById('btn-cerrar-sesion').hidden = !usuario;
+        const badge = document.getElementById('usuario-activo-badge');
+        badge.hidden = !usuario;
+        if (usuario) badge.textContent = `${usuario.nombre_usuario} (${rol})`;
+
+        const subEncuesta = document.getElementById('encuesta-subtitulo-sesion');
+        if (subEncuesta) {
+          subEncuesta.textContent = usuario
+            ? `Sesión activa como ${usuario.nombre_usuario} (${rol}). Tus respuestas se vincularán a tu perfil.`
+            : 'Participacion voluntaria y anonima. Registra tus habitos de separacion para visualizar un resumen y contribuir al diagnostico comunitario.';
+        }
+
+        document.querySelectorAll('[data-rol-colaborador]').forEach(el => {
+          el.hidden = !['colaborador', 'admin'].includes(rol);
+        });
+
+        document.querySelectorAll('[data-rol-admin]').forEach(el => {
+          el.hidden = rol !== 'admin';
+        });
+
+        if (rol === 'admin') {
+          cargarUsuariosAdmin();
+        }
+      }
+
+      actualizarInterfazRoles();
     });
   </script>
 </body>

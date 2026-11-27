@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Usuario extends Authenticatable
 {
     use HasApiTokens;
 
@@ -25,7 +25,7 @@ class User extends Authenticatable
         'password_hash',
     ];
 
-    public function getAuthPassword()
+    public function getAuthPassword(): string
     {
         return $this->password_hash;
     }

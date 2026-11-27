@@ -38,9 +38,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/perfil', [AuthController::class, 'perfil']);
 
-    // Solo Colaboradores y Administradores pueden crear o editar residuos
+    // Colaboradores y Administradores: gestionar residuos
     Route::middleware('rol:colaborador,admin')->group(function () {
         Route::post('/residuos', [ResiduoController::class, 'store']);
         Route::patch('/residuos/{id}', [ResiduoController::class, 'update']);
+    });
+
+    // Solo Administradores: gestionar usuarios y roles
+    Route::middleware('rol:admin')->group(function () {
+        Route::get('/usuarios', [AuthController::class, 'indexUsuarios']);
+        Route::patch('/usuarios/{id}', [AuthController::class, 'actualizarRol']);
     });
 });
