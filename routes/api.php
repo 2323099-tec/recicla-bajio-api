@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CentroAcopioController;
+use App\Http\Controllers\Api\ContactoController;
 use App\Http\Controllers\Api\EncuestaController;
 use App\Http\Controllers\Api\ResiduoController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,9 @@ Route::get('/acopio/materiales', [CentroAcopioController::class, 'porMateriales'
 // Módulo 4 y 5: Encuestas y Estadísticas
 Route::post('/encuestas', [EncuestaController::class, 'store']);
 Route::get('/estadisticas', [EncuestaController::class, 'estadisticas']);
+
+// Módulo 7: Contacto y Retroalimentación
+Route::post('/contacto', [ContactoController::class, 'store']);
 
 // ============================================================================
 // RUTAS PROTEGIDAS (Requieren Token Bearer de Sanctum)
